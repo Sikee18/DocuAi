@@ -1,0 +1,233 @@
+ RAG Chatbot Application (Reflex + LangChain) 
+ 1. Project Overview
+This project is a Retrieval-Augmented Generation (RAG) based AI chatbot built using:
+Reflex → Frontend + State Management
+LangChain → Document processing & retrieval
+ChromaDB → Vector database
+LLM (Groq / Llama) → Answer generation
+ 2. Architecture of the Project
+User → Upload Page → Documents Folder → RAG Backend
+     → Vector Store → Retriever → LLM → Answer
+Frontend (Reflex Pages)
+    ↓
+State Management (ChatState)
+    ↓
+Backend (rag.py)
+ Flow
+User uploads documents
+Files are stored in /documents
+Backend processes documents → creates embeddings
+Vectorstore + Retriever created
+User asks question
+Retriever fetches relevant chunks
+LLM generates answer using:
+Context (documents)
+Conversation history
+Answer displayed with sources
+ 3. Folder Structure
+RAG_Project/
+│
+├── components/
+│   ├── navbar.py
+│   ├── hero.py
+│   ├── footer.py
+│
+├── pages/
+│   ├── home.py
+│   ├── upload.py
+│   ├── chat.py
+│   ├── history.py
+│
+├── states/
+│   └── rag_state.py
+│
+├── backend/
+│   └── rag.py
+│
+├── documents/        # uploaded files (temporary)
+ 4. Why We Use State (IMPORTANT)
+ Purpose of ChatState
+Reflex uses State to:
+Store user input
+Store chat history
+Handle uploads
+Connect UI ↔ backend logic
+ In Our App:
+ChatState = Brain of the app
+It manages:
+question → current input
+history → session memory
+uploaded_files → uploaded docs
+handle_upload() → file logic
+ask() → chat logic
+ 5. Backend (rag.py) — Key Concepts
+ Why RAG?
+Instead of LLM guessing:
+LLM + Documents → Accurate answers
+ Key Components
+1. Document Loading
+Uses DirectoryLoader
+Supports multiple files (PDF + TXT)
+2. Chunking
+Breaks documents into smaller parts
+Helps better retrieval
+3. Embeddings
+Converts text → vectors
+Used for similarity search
+4. Vector Store (Chroma)
+Stores embeddings
+Enables fast retrieval
+5. Retriever
+Fetches top relevant chunks
+6. Corrective RAG (Advanced Feature)
+We added:
+Relevance check (YES/NO)
+Query rewriting if needed
+ Important Backend Improvements We Did
+1. Session-based Memory
+Removed persist_directory
+Vectorstore exists only during session
+ 2. Dynamic Document Addition
+If vectorstore exists → add_documents()
+Else → create new
+ 3. Conversation Memory (VERY IMPORTANT)
+We modified:
+corrective_rag(query, history)
+Now LLM sees:
+Past Q/A
+Current query
+4. History Injection into Prompt- final prompt
+Conversation History + Context + Question
+This allows:
+Follow-up questions
+Better answers
+ 6. Pages Explanation (Frontend)
+ Home Page (home.py)
+Purpose:
+Landing page
+Key Reflex Components:
+rx.vstack → vertical layout
+rx.hstack → horizontal layout
+rx.box → container
+rx.heading, rx.text
+Logic:
+Combine navbar + hero + footer
+Apply gradient background
+ Upload Page (upload.py)
+Purpose:
+Upload documents
+Key Components:
+rx.upload
+rx.button
+rx.foreach
+Logic:
+on_drop → ChatState.handle_upload
+What Happens:
+Files uploaded
+Saved in /documents
+Backend processing triggered
+Redirect to /chat
+Important Props:
+multiple=True → allow multiple files
+on_drop → trigger function
+ Chat Page (chat.py)
+Purpose:
+Main chatbot UI
+Key Components:
+🔹 Chat History
+rx.foreach(ChatState.history, ...)
+🔹 Input
+rx.input(on_change=ChatState.set_question)
+🔹 Button
+on_click=ChatState.ask
+Logic:
+User types question
+ask() runs
+Backend called
+Answer + sources stored
+UI updates automatically
+ Important Fix We Did
+Instead of:
+append()
+We used:
+new list assignment
+Reason:
+Reflex reactivity works on new objects
+ History Page (history.py)
+Purpose:
+Show full session chat history
+Key Component:
+rx.foreach(ChatState.history)
+Logic:
+Reads from same state
+Displays all Q/A/Sources
+Optional:
+Add clear history button
+ 7. State Logic (rag_state.py)
+ ask()
+Calls backend
+Stores result
+Updates history
+ handle_upload()
+Saves files
+Runs RAG pipeline
+Redirects to chat
+reset_session()
+Clears documents
+Clears vectorstore
+Clears retriever
+8. Important Design Decisions
+Why no persist_directory?
+Because:
+We want session-based memory (temporary)
+ Why global vectorstore?
+To:
+Reuse same memory
+Add new documents dynamically
+ Why pass history manually?
+Instead of LangChain memory:
+Simpler
+More control
+Works perfectly for this project
+ 9. Common Errors & Fixes
+ ModuleNotFoundError
+Fix:
+Use proper import paths
+Add __init__.py
+Directory not found
+Fix:
+Create documents/ dynamically
+ UI not updating
+Fix:
+Avoid append → use new list
+ UntypedVarError
+Fix:
+Use proper typing in state
+ 10. What Should Learn
+ From Frontend:
+Reflex components
+State management
+Dynamic rendering (foreach)
+ From Backend:
+RAG pipeline
+Vector databases
+Embeddings
+Prompt engineering
+ From Integration:
+UI ↔ Backend flow
+File handling
+Real-time updates
+Final Summary
+This project demonstrates:
+✔ Full-stack GenAI application
+✔ Real-time document-based chatbot
+✔ Session-based memory
+✔ Clean architecture
+✔ Scalable design
+ Next Improvements – This we can explain in the internal presentation
+Chat UI like ChatGPT
+Streaming responses
+Multi-user support
+Persistent database
+Authentication system
+End of Document

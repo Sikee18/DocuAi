@@ -1,0 +1,74 @@
+# # *.py[cod]
+# # *.db
+# # .web
+# # .states
+# # assets/external/
+# # __pycache__/
+
+# *.py[cod]
+# *.db
+# .web
+# .states
+# assets/external/
+# __pycache__/
+
+# # 🔐 Secrets
+# .env
+
+# # 📂 RAG Data
+# chroma_db/
+# uploads/
+# documents/
+
+
+# -------------------------------
+# Python cache & compiled files
+# -------------------------------
+__pycache__/
+*.py[cod]
+
+# -------------------------------
+# Environment variables (IMPORTANT 🔐)
+# -------------------------------
+.env
+
+# -------------------------------
+# Virtual environment
+# -------------------------------
+venv/
+.venv/
+
+# -------------------------------
+# Database / Vector store (RAG)
+# -------------------------------
+chroma_db/
+*.db
+
+# -------------------------------
+# Uploaded / local documents
+# -------------------------------
+uploads/
+documents/
+
+# -------------------------------
+# OS / system files
+# -------------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------------
+# Reflex build files
+# -------------------------------
+.web/
+.states
+
+# -------------------------------
+# Misc
+# -------------------------------
+*.log
+venv/
+.env
+__pycache__/
+*.pyc
+documents/
+

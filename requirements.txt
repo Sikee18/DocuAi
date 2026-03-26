@@ -1,0 +1,30 @@
+#LangChain Core
+langchain
+langchain-core
+langchain_community
+
+#Grog
+langchain-groq
+
+#Environment Variable Management
+python-dotenv
+
+#streamlit
+streamlit
+
+pypdf
+pymupdf
+unstructured
+pdfminer.six
+unstructured_pytesseract
+unstructured_inference
+
+langchain-huggingface
+sentence-transformers
+
+#for frontend
+
+reflex==0.8.27
+gunicorn
+reportlab
+chromadb
