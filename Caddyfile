@@ -1,0 +1,17 @@
+:7860 {
+    # Proxy API and Websocket requests to the backend FastAPI server
+    handle_path /_event/* {
+        reverse_proxy localhost:8000
+    }
+    handle_path /ping* {
+        reverse_proxy localhost:8000
+    }
+    handle_path /_upload* {
+        reverse_proxy localhost:8000
+    }
+    
+    # Proxy all other standard HTTP traffic to the React JS frontend
+    handle {
+        reverse_proxy localhost:3000
+    }
+}
