@@ -1,3 +1,9 @@
+{
+    # Global options to resolve IPv6 connection refused errors ([::1])
+    # Force Caddy to use IPv4 for resolving addresses like localhost
+    preferred_ip_family ipv4
+}
+
 :7860 {
     # Proxy API and Websocket requests without stripping the URL paths
     # Use 127.0.0.1 to force IPv4 and prevent [::1] connection refused errors
