@@ -52,15 +52,29 @@ class ChatState(rx.State):
        self.history = []    
 
     def download_chat(self):
+        import time
+        import os
 
-        file_path = "assets/chat_history.pdf"
+        # Create a unique filename to prevent browser caching
+        timestamp = int(time.time())
+        filename = f"chat_history_{timestamp}.pdf"
+        file_path = f"assets/{filename}"
+
+        # Clean up any existing old chat history files in assets to keep it tidy
+        if os.path.exists("assets"):
+            for f in os.listdir("assets"):
+                if f.startswith("chat_history_") and f.endswith(".pdf"):
+                    try:
+                        os.remove(os.path.join("assets", f))
+                    except Exception:
+                        pass
 
         doc = SimpleDocTemplate(file_path)
         styles = getSampleStyleSheet()
 
         elements = []
 
-    # Loop through chat history
+        # Loop through chat history
         for item in self.history:
             elements.append(Paragraph(f"<b>Question:</b> {item.question}", styles["Normal"]))
             elements.append(Spacer(1, 10))
@@ -73,4 +87,4 @@ class ChatState(rx.State):
 
         doc.build(elements)
 
-        return rx.download("/chat_history.pdf")   # 🔥 IMPORTANT   
+        return rx.download(f"/{filename}")   # 🔥 Fresh download every time

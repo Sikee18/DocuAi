@@ -1,0 +1,5 @@
+This is a test document for the DocuAi system.
+It contains information about a fictional company called 'NeoSpace'.
+NeoSpace was founded in 2025 and specializes in orbital logistics.
+Their flagship spacecraft is the 'Astra-1'.
+The CEO of NeoSpace is Elena Vance.
