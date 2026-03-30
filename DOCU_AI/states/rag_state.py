@@ -52,24 +52,14 @@ class ChatState(rx.State):
        self.history = []    
 
     def download_chat(self):
-        import time
-        import os
+        import io
+        import base64
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+        from reportlab.lib.styles import getSampleStyleSheet
 
-        # Create a unique filename to prevent browser caching
-        timestamp = int(time.time())
-        filename = f"chat_history_{timestamp}.pdf"
-        file_path = f"assets/{filename}"
-
-        # Clean up any existing old chat history files in assets to keep it tidy
-        if os.path.exists("assets"):
-            for f in os.listdir("assets"):
-                if f.startswith("chat_history_") and f.endswith(".pdf"):
-                    try:
-                        os.remove(os.path.join("assets", f))
-                    except Exception:
-                        pass
-
-        doc = SimpleDocTemplate(file_path)
+        # Use BytesIO to generate PDF in memory to bypass production static-file caching bugs
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer)
         styles = getSampleStyleSheet()
 
         elements = []
@@ -87,4 +77,9 @@ class ChatState(rx.State):
 
         doc.build(elements)
 
-        return rx.download(f"/{filename}")   # 🔥 Fresh download every time
+        # Retrieve the data from the buffer and encode it in base64
+        pdf_data = buffer.getvalue()
+        buffer.close()
+        
+        # In Reflex, you can download binary data directly
+        return rx.download(data=pdf_data, filename="chat_history.pdf")

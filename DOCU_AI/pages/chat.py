@@ -11,8 +11,24 @@ def chat() -> rx.Component:
             rx.vstack(
                 # Header
                 rx.hstack(
-                    rx.icon(tag="message-square", size=24, color="#2563eb"),
-                    rx.heading("Secure AI Assistant", size="6", color="#0f172a"),
+                    rx.hstack(
+                        rx.icon(tag="message-square", size=24, color="#2563eb"),
+                        rx.heading("Secure AI Assistant", size="6", color="#0f172a"),
+                        spacing="2",
+                        align="center",
+                    ),
+                    rx.spacer(),
+                    rx.button(
+                        rx.icon(tag="plus", size=18),
+                        "New Chat",
+                        on_click=ChatState.clear_history,
+                        variant="soft",
+                        color_scheme="blue",
+                        size="2",
+                        radius="full",
+                        _hover={"transform": "scale(1.05)"},
+                        transition="all 0.2s"
+                    ),
                     align="center",
                     padding_y="20px",
                     border_bottom="1px solid #e2e8f0",
