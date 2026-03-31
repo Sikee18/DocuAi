@@ -9,17 +9,15 @@ from DOCU_AI.DOCU_AI import app
 # 1. Extract the internal FastAPI instance
 api = app.api
 
-# 2. Configure CORS according to deployment guide
-# We allow the official Hugging Face domain and local dev ports
+# 2. Dynamic Port Handling (Cloud Agnostic)
+# Railway/Render provide the PORT variable dynamically
+PORT = int(os.getenv("PORT", "7860"))
+
+# 3. Configure CORS with Wildcard for Migration Safety
 origins = [
     "https://sikee18-docuai-official.hf.space",
-    "https://sikee18-docuai-final.hf.space",
-    "https://sikee18-docuai.hf.space",
     "http://localhost:3000",
-    "http://0.0.0.0:3000",
-    "http://localhost:7860",
-    "http://0.0.0.0:7860",
-    "*"  # Fallback for dynamic HF internal URLs
+    "*"  # Wildcard allows early Railway domains to connect without manual config
 ]
 
 api.add_middleware(

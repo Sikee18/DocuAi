@@ -22,9 +22,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Initialize Reflex and Export the Frontend
-# This creates the static assets for the single-port deployment.
-RUN reflex init && \
-    reflex export --frontend-only --no-zip && \
+# We provide a dummy key during build to prevent GroqError.
+RUN GROQ_API_KEY=gsk_build_check_dummy reflex init && \
+    GROQ_API_KEY=gsk_build_check_dummy reflex export --frontend-only --no-zip && \
     mkdir -p /app/static && \
     mv .web/_static/* /app/static/ || cp -r .web/_static/. /app/static/
 
@@ -33,7 +33,7 @@ RUN reflex init && \
 # -------------------------------
 FROM python:3.11-slim
 
-# Install runtime dependencies (e.g. system libraries for vector DBs)
+# Install runtime dependencies for PDF/VectorDB processing
 RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
@@ -41,29 +41,19 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Create a non-root user for Hugging Face
-RUN useradd -m -u 1000 user
-USER user
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH
-
-WORKDIR /app
-
 # Install production Python dependencies
-COPY --chown=user:user requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY . .
+# Copy built static assets
+COPY --from=builder /app/static ./static
 
-# Copy the built app.py and project code
-COPY --chown=user:user . .
-# Copy static files from the builder stage
-COPY --chown=user:user --from=builder /app/static ./static
-
-# Ensure the documents directory exists for RAG
+# Ensure common doc directory exists
 RUN mkdir -p /app/DOCU_AI/documents
 
-# Expose the mandatory Hugging Face port
+# Railway will provide the $PORT env var dynamically.
+# Our app.py already detects this.
 EXPOSE 7860
 
-# Launch the unified FastAPI app on port 7860
-# This satisfies Step 3 (Single Service) and Step 4 (Startup Command)
+# Launch unified FastAPI app with dynamic port detection
 CMD ["python3", "-m", "uvicorn", "app:api", "--host", "0.0.0.0", "--port", "7860"]

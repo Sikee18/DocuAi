@@ -15,9 +15,12 @@ load_dotenv()
 # -------------------------------
 # Initialize LLM
 # -------------------------------
+# Build-safe initialization: Use dummy key if actual key is missing during Docker build phase.
+groq_key = os.getenv("GROQ_API_KEY") or "gsk_build_time_placeholder"
 llm = ChatGroq(
     model='llama-3.1-8b-instant',
-    temperature=0.7
+    temperature=0.7,
+    api_key=groq_key
 )
 
 # -------------------------------
