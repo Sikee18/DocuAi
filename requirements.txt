@@ -9,9 +9,6 @@ langchain-groq
 #Environment Variable Management
 python-dotenv
 
-#streamlit
-streamlit
-
 pypdf
 pymupdf
 unstructured
