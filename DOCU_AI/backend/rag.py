@@ -3,7 +3,7 @@
 # Imports
 # -------------------------------
 
-from langchain_huggingface import HuggingFaceEmbeddings
+# from langchain_huggingface import HuggingFaceEmbeddings # Removed to stay under 4GB limit
 from langchain_groq import ChatGroq
 from langchain_community.embeddings import FakeEmbeddings
 from dotenv import load_dotenv
@@ -78,9 +78,9 @@ def build_vectorstore():
     splitted_docs = splitter.split_documents(docs)
     print("Creating vectorestore...")
     #embedding_model =FakeEmbeddings(size=384)
-    from langchain_huggingface import HuggingFaceEmbeddings
-    embedding_model = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+    from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
+    embedding_model = FastEmbedEmbeddings(
+        model_name="BAAI/bge-small-en-v1.5"
     )
 
     vectorstore = Chroma.from_documents(

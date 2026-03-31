@@ -11,8 +11,9 @@ python-dotenv
 
 pypdf
 pymupdf
-langchain-huggingface
-sentence-transformers
+pypdf
+pymupdf
+fastembed
 
 #for frontend
 
