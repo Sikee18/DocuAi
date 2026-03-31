@@ -23,10 +23,12 @@ COPY . .
 
 # Initialize Reflex and Export the Frontend
 # We provide a dummy key during build to prevent GroqError.
+# We use the standard zip-based export to ensure all assets are captured.
 RUN GROQ_API_KEY=gsk_build_check_dummy reflex init && \
-    GROQ_API_KEY=gsk_build_check_dummy reflex export --frontend-only --no-zip && \
+    GROQ_API_KEY=gsk_build_check_dummy reflex export --frontend-only && \
     mkdir -p /app/static && \
-    mv .web/_static/* /app/static/ || cp -r .web/_static/. /app/static/
+    unzip frontend.zip -d /app/static && \
+    rm frontend.zip
 
 # -------------------------------
 # Stage 2: Final Production Image
@@ -45,7 +47,7 @@ WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . .
-# Copy built static assets
+# Copy built static assets from Stage 1
 COPY --from=builder /app/static ./static
 
 # Ensure common doc directory exists
@@ -56,4 +58,5 @@ RUN mkdir -p /app/DOCU_AI/documents
 EXPOSE 7860
 
 # Launch unified FastAPI app with dynamic port detection
+# This satisfies the single-port requirement and build-time resilience.
 CMD ["python3", "-m", "uvicorn", "app:api", "--host", "0.0.0.0", "--port", "7860"]
