@@ -4,14 +4,13 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 
 from DOCU_AI.backend.rag import get_answer
-from pydantic import BaseModel
 import os
 
-# ✅ Create proper data model
-class ChatItem(BaseModel):
-    question: str
-    answer: str
-    sources: str
+# ✅ Create proper data model — must be rx.Base for Reflex state serialization
+class ChatItem(rx.Base):
+    question: str = ""
+    answer: str = ""
+    sources: str = ""
 
 
 
@@ -21,21 +20,25 @@ class ChatState(rx.State):
     is_loading: bool = False   # ✅ ADD THIS
 
     def handle_submit(self, form_data: dict):
-        self.question = form_data.get("chat_input", "")
-        self.ask_question()
+        question = form_data.get("chat_input", "").strip()
+        if not question:
+            return
+        self.question = question
+        yield from self.ask_question()
 
     def ask_question(self):
         if not self.question.strip():
             return
 
-        self.is_loading = True   # 🔥 START LOADING
+        self.is_loading = True
+        yield
 
         answer, sources = get_answer(self.question)
 
         if isinstance(sources, list):
             sources = ", ".join([os.path.basename(s) for s in sources])
         else:
-            sources = os.path.basename(sources)    
+            sources = os.path.basename(str(sources))
 
         new_item = ChatItem(
             question=self.question,
@@ -44,9 +47,8 @@ class ChatState(rx.State):
         )
 
         self.history = self.history + [new_item]
-
         self.question = ""
-        self.is_loading = False   # 🔥 STOP LOADING
+        self.is_loading = False
 
     def clear_history(self):##
        self.history = []    

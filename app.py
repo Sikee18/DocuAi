@@ -15,7 +15,7 @@ PORT = int(os.getenv("PORT", "7860"))
 
 # 3. Configure CORS with Wildcard for Migration Safety
 origins = [
-    "https://sikee18-docuai-official.hf.space",
+    "https://localhost:8000",
     "http://localhost:3000",
     "*"  # Wildcard allows early Railway domains to connect without manual config
 ]

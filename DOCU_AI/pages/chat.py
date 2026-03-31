@@ -90,7 +90,8 @@ def chat() -> rx.Component:
                                 radius="full",
                                 height="50px",
                                 border="1px solid #cbd5e1",
-                                background_color="#ffffff"
+                                background_color="#ffffff",
+                                color="#1e293b"
                             ),
                             rx.button(
                                 rx.icon(tag="send", size=18),
