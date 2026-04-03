@@ -1,0 +1,94 @@
+﻿Warning: Reflex support for
+Python 3.10 is deprecated 
+and will be removed in a 
+future release. Please 
+upgrade to Python 3.11 or 
+higher for continued 
+support.
+Warning: Windows Subsystem 
+for Linux (WSL) is 
+recommended for improving 
+initial install times.
+--- Starting Reflex App ---
+Warning: Using Uvicorn for 
+backend as it is installed.
+This behavior will change 
+in 0.8.0 to use Granian by 
+default.
+DeprecationWarning: rx.Base
+has been deprecated in 
+version 0.8.15. <class 
+'DOCU_AI.pages.upload.Uploa
+dedFile'> is subclassing 
+rx.Base. You can subclass 
+from `pydantic.BaseModel` 
+directly instead or use 
+dataclasses if possible. It
+will be completely removed 
+in 0.9.0. 
+(venv\lib\site-packages\pyd
+antic\v1\main.py:282)
+Warning: Invalid icon tag: 
+upload_cloud. Please use 
+one of the following: 
+cloud_upload, 
+hard_drive_upload, 
+monitor_cloud, upload, 
+clipboard_clock, 
+cloud_alert, cloud_backup, 
+cloud_check, cloud_cog, 
+cloud_download, ...
+See full list at 
+https://reflex.dev/docs/lib
+rary/data-display/icon/#ico
+ns-list. Using 
+'circle_help' icon instead.
+Warning: Invalid icon tag: 
+check_circle. Please use 
+one of the following: 
+check_check, loader_circle,
+message_circle_code, 
+message_circle_dashed, 
+message_circle_heart, 
+message_circle_more, 
+message_circle_off, 
+message_circle_plus, 
+message_circle_question, 
+message_circle_reply, ...
+See full list at 
+https://reflex.dev/docs/lib
+rary/data-display/icon/#ico
+ns-list. Using 
+'circle_help' icon instead.
+Warning: Invalid icon tag: 
+check_circle. Please use 
+one of the following: 
+check_check, loader_circle,
+message_circle_code, 
+message_circle_dashed, 
+message_circle_heart, 
+message_circle_more, 
+message_circle_off, 
+message_circle_plus, 
+message_circle_question, 
+message_circle_reply, ...
+See full list at 
+https://reflex.dev/docs/lib
+rary/data-display/icon/#ico
+ns-list. Using 
+'circle_help' icon instead.
+DeprecationWarning: 
+state_auto_setters 
+defaulting to True has been
+deprecated in version 
+0.8.9. The default value 
+will be changed to False in
+a future release. Set 
+state_auto_setters 
+explicitly or define 
+setters explicitly. Used 
+set_preferred_language in 
+ChatState without defining 
+it. It will be completely 
+removed in 0.9.0. 
+(DOCU_AI\pages\chat.py:21)

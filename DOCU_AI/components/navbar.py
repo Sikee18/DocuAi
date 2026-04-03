@@ -4,7 +4,7 @@ def navbar():
     return rx.box(
         rx.hstack(
             rx.hstack(
-                rx.icon(tag="layers", size=28, color="#2563eb"),
+                rx.icon(tag="layers", color="#2563eb"),
                 rx.text("DocuSearch AI", font_size="22px", font_weight="800", color="#0f172a", letter_spacing="-0.5px"),
                 align="center",
                 spacing="2"
@@ -15,6 +15,7 @@ def navbar():
                 rx.link("Upload", href="/upload", style={"_hover": {"color": "#2563eb", "transform": "scale(1.05)"}, "transition": "all 0.2s"}, font_weight="600", color="#475569"),
                 rx.link("Chat", href="/chat", style={"_hover": {"color": "#2563eb", "transform": "scale(1.05)"}, "transition": "all 0.2s"}, font_weight="600", color="#475569"),
                 rx.link("History", href="/history", style={"_hover": {"color": "#2563eb", "transform": "scale(1.05)"}, "transition": "all 0.2s"}, font_weight="600", color="#475569"),
+                rx.link("Insights", href="/insights", style={"_hover": {"color": "#2563eb", "transform": "scale(1.05)"}, "transition": "all 0.2s"}, font_weight="600", color="#475569"),
                 spacing="6",
             ),
             width="100%",

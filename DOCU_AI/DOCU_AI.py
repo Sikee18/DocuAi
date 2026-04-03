@@ -14,11 +14,11 @@
 #     return rx.container(
 #         rx.color_mode.button(position="top-right"),
 #         rx.vstack(
-#             rx.heading("Welcome to Reflex!", size="9"),
+#             rx.heading("Welcome to Reflex!", ),
 #             rx.text(
 #                 "Get started by editing ",
 #                 rx.code(f"{config.app_name}/{config.app_name}.py"),
-#                 size="5",
+#                 ,
 #             ),
 #             rx.link(
 #                 rx.button("Check out our docs!"),
@@ -71,6 +71,7 @@ from DOCU_AI.pages.home import home
 from DOCU_AI.pages.upload import upload
 from DOCU_AI.pages.chat import chat
 from DOCU_AI.pages.history import history
+from DOCU_AI.pages.insights import insights
 
 app = rx.App(
     theme=rx.theme(
@@ -84,6 +85,7 @@ app.add_page(upload, route="/upload")
 app.add_page(chat, route="/chat")
 app.add_page(history, route="/history")
 app.add_page(about, route="/about")
+app.add_page(insights, route="/insights")
 
 
 

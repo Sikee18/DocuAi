@@ -5,13 +5,10 @@ def hero():
         rx.box(
             rx.text("Enterprise Ready", font_size="14px", font_weight="700", color="#2563eb", text_transform="uppercase", margin_bottom="4px", text_align="center"),
             rx.heading(
-                rx.text.span("AI Document Intelligence", background_image="linear-gradient(90deg, #1e3a8a, #2563eb, #0ea5e9)", background_clip="text", color="transparent"),
-                rx.text.span("\nSearch & Retrieval", color="#0f172a"),
+                "AI Document Intelligence Search & Retrieval",
                 size="9",
                 weight="bold",
                 text_align="center",
-                line_height="1.2",
-                style={"font_size": "clamp(3rem, 5vw, 4rem)", "letter_spacing": "-1px"}
             ),
             rx.text(
                 "Instantly chat with your internal documents using advanced open-source RAG models. Secure, private, and incredibly fast.",
@@ -25,31 +22,18 @@ def hero():
             rx.hstack(
                 rx.button(
                     "Get Started Now",
-                    rx.icon(tag="arrow-right", size=18),
+                    rx.icon(tag="arrow-right"),
                     on_click=rx.redirect("/upload"),
-                    background="linear-gradient(90deg, #2563eb, #3b82f6)",
+                    background="#2563eb",
                     color="white",
-                    size="4",
-                    radius="full",
-                    padding_x="32px",
-                    padding_y="24px",
-                    font_size="18px",
-                    font_weight="600",
-                    box_shadow="0 10px 25px -5px rgba(37, 99, 235, 0.4)",
-                    style={"_hover": {"transform": "translateY(-2px)", "box_shadow": "0 20px 25px -5px rgba(37, 99, 235, 0.5)"}, "transition": "all 0.3s ease"}
+                    size="3",
                 ),
                 rx.button(
                     "View History",
                     on_click=rx.redirect("/history"),
                     variant="outline",
-                    size="4",
-                    radius="full",
+                    size="3",
                     color_scheme="gray",
-                    padding_x="32px",
-                    padding_y="24px",
-                    font_size="18px",
-                    font_weight="600",
-                    style={"_hover": {"background": "#f1f5f9"}, "transition": "all 0.3s ease"}
                 ),
                 spacing="5",
                 justify="center"
@@ -78,7 +62,7 @@ def hero():
 def feature_card(title: str, description: str, icon_tag: str):
     return rx.vstack(
         rx.box(
-            rx.icon(tag=icon_tag, size=24, color="#2563eb"),
+            rx.icon(tag=icon_tag, color="#2563eb"),
             padding="12px",
             background="#eff6ff",
             border_radius="12px",
@@ -93,5 +77,4 @@ def feature_card(title: str, description: str, icon_tag: str):
         border="1px solid #e2e8f0",
         box_shadow="0 4px 6px -1px rgba(0, 0, 0, 0.05)",
         width="280px",
-        style={"_hover": {"transform": "translateY(-5px)", "box_shadow": "0 20px 25px -5px rgba(0, 0, 0, 0.1)"}, "transition": "all 0.3s ease"}
     )

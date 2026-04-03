@@ -1,22 +1,25 @@
-#LangChain Core
+# LangChain Core
 langchain
 langchain-core
 langchain_community
 
-#Grog
+# Models & Embeddings
 langchain-groq
-
-#Environment Variable Management
-python-dotenv
-
-pypdf
-pymupdf
-pypdf
-pymupdf
+google-generativeai
 fastembed
 
-#for frontend
+# Environment Variable Management
+python-dotenv
 
+# Document Loaders & Processors
+pypdf
+pymupdf
+langdetect
+docx2txt
+rapidocr-onnxruntime
+requests
+
+# Frontend
 reflex==0.8.27
 gunicorn
 reportlab

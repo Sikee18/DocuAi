@@ -1,0 +1,8 @@
+﻿Warning: Reflex support for
+Python 3.10 is deprecated 
+and will be removed in a 
+future release. Please 
+upgrade to Python 3.11 or 
+higher for continued 
+support.
+['Area', 'AreaChart', 'Bar', 'BarChart', 'Brush', 'CartesianAxis', 'CartesianGrid', 'Cell', 'ComposedChart', 'ErrorBar', 'Funnel', 'FunnelChart', 'GraphingTooltip', 'Label', 'LabelList', 'Legend', 'Line', 'LineChart', 'LiteralAnimationEasing', 'LiteralAxisType', 'LiteralBarChartStackOffset', 'LiteralComposedChartBaseValue', 'LiteralCurveType', 'LiteralDirection', 'LiteralGridType', 'LiteralIconType', 'LiteralIfOverflow', 'LiteralInterval', 'LiteralLayout', 'LiteralLegendAlign', 'LiteralLegendType', 'LiteralLineType', 'LiteralOrientation', 'LiteralOrientationLeftRightMiddle', 'LiteralOrientationTopBottom', 'LiteralOrientationTopBottomLeftRight', 'LiteralPolarRadiusType', 'LiteralScale', 'LiteralShape', 'LiteralStackOffset', 'LiteralSyncMethod', 'LiteralVerticalAlign', 'Pie', 'PieChart', 'PolarAngleAxis', 'PolarGrid', 'PolarRadiusAxis', 'Radar', 'RadarChart', 'RadialBar', 'RadialBarChart', 'ReferenceArea', 'ReferenceDot', 'ReferenceLine', 'ResponsiveContainer', 'Scatter', 'ScatterChart', 'Treemap', 'XAxis', 'YAxis', 'ZAxis', 'area', 'area_chart', 'bar', 'bar_chart', 'brush', 'cartesian_axis', 'cartesian_grid', 'cell', 'composed_chart', 'error_bar', 'funnel', 'funnel_chart', 'graphing_tooltip', 'label', 'label_list', 'legend', 'line', 'line_chart', 'pie', 'pie_chart', 'polar_angle_axis', 'polar_grid', 'polar_radius_axis', 'radar', 'radar_chart', 'radial_bar', 'radial_bar_chart', 'reference_area', 'reference_dot', 'reference_line', 'responsive_container', 'scatter', 'scatter_chart', 'tooltip', 'treemap', 'x_axis', 'y_axis', 'z_axis']

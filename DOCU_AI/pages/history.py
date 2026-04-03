@@ -8,8 +8,8 @@ def history():
 
         rx.vstack(
             rx.hstack(
-                rx.icon(tag="history", size=28, color="#0f172a"),
-                rx.heading("Conversation History", size="7", color="#0f172a", font_weight="800"),
+                rx.icon(tag="history", color="#0f172a"),
+                rx.heading("Conversation History", color="#0f172a", font_weight="800"),
                 align="center",
                 spacing="3",
                 margin_bottom="20px"
@@ -19,13 +19,13 @@ def history():
                 ChatState.history.length() == 0,
                 rx.box(
                     rx.vstack(
-                        rx.icon(tag="clock", size=48, color="#cbd5e1", margin_bottom="10px"),
-                        rx.text("No chat history available.", font_weight="600", color="#475569", size="4"),
+                        rx.icon(tag="clock", color="#cbd5e1", margin_bottom="10px"),
+                        rx.text("No chat history available.", font_weight="600", color="#475569"),
                         rx.text("Your past interactions will appear here.", color="#94a3b8"),
                         align="center",
                         padding="60px",
                         border="2px dashed #e2e8f0",
-                        border_radius="16px",
+                        border_radius="20px",
                         background="#f8fafc",
                         width="100%"
                     ),
@@ -39,19 +39,17 @@ def history():
                     
                     rx.hstack(
                         rx.button(
-                            rx.icon(tag="trash-2", size=16),
+                            rx.icon(tag="trash"),
                             "Clear History",
                             color_scheme="red",
                             variant="soft",
-                            size="3",
                             on_click=ChatState.clear_history,
                             style={"_hover": {"background": "#fee2e2"}}
                         ),
                         rx.button(
-                            rx.icon(tag="download", size=16),
+                            rx.icon(tag="download"),
                             "Download PDF",
                             color_scheme="blue",
-                            size="3",
                             on_click=ChatState.download_chat,
                             box_shadow="0 4px 14px 0 rgba(0, 118, 255, 0.39)",
                         ),
@@ -85,8 +83,8 @@ def history_card(item):
     return rx.box(
         rx.vstack(
             rx.hstack(
-                rx.icon(tag="user", size=16, color="#2563eb"),
-                rx.text(item.question, font_weight="700", color="#1e293b", size="3"),
+                rx.icon(tag="user", color="#2563eb"),
+                rx.text(item.question, font_weight="700", color="#1e293b"),
                 align="center",
                 spacing="2",
                 margin_bottom="10px"
@@ -103,7 +101,7 @@ def history_card(item):
             rx.cond(
                 item.sources != "",
                 rx.hstack(
-                    rx.badge(item.sources, color_scheme="gray", variant="soft", radius="full"),
+                    rx.badge(item.sources, color_scheme="gray", variant="soft"),
                     align="center",
                     margin_top="5px"
                 )

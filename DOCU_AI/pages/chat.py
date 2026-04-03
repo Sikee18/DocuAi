@@ -12,22 +12,23 @@ def chat() -> rx.Component:
                 # Header
                 rx.hstack(
                     rx.hstack(
-                        rx.icon(tag="message-square", size=24, color="#2563eb"),
-                        rx.heading("Secure AI Assistant", size="6", color="#0f172a"),
+                        rx.icon(tag="message_square", color="#2563eb"),
+                        rx.heading("Secure AI Assistant", color="#0f172a"),
                         spacing="2",
                         align="center",
                     ),
                     rx.spacer(),
+                    rx.select(
+                        ["English", "Tamil", "Hindi", "Telugu", "Kannada", "Malayalam", "Bengali"],
+                        value=ChatState.preferred_language,
+                        on_change=ChatState.set_preferred_language,
+                        color_scheme="blue",
+                    ),
                     rx.button(
-                        rx.icon(tag="plus", size=18),
+                        rx.icon(tag="plus"),
                         "New Chat",
                         on_click=ChatState.clear_history,
-                        variant="soft",
                         color_scheme="blue",
-                        size="2",
-                        radius="full",
-                        _hover={"transform": "scale(1.05)"},
-                        transition="all 0.2s"
                     ),
                     align="center",
                     padding_y="20px",
@@ -41,7 +42,7 @@ def chat() -> rx.Component:
                         rx.cond(
                             ChatState.history.length() == 0,
                             rx.vstack(
-                                rx.icon(tag="bot", size=48, color="#cbd5e1", margin_bottom="10px"),
+                                rx.icon(tag="bot", color="#cbd5e1", margin_bottom="10px"),
                                 rx.text("I am ready to answer questions based on your uploaded documents.", color="#64748b", text_align="center"),
                                 align="center",
                                 justify="center",
@@ -56,11 +57,11 @@ def chat() -> rx.Component:
                         rx.cond(
                             ChatState.is_loading,
                             rx.hstack(
-                                rx.spinner(size="2", color="#2563eb"),
+                                rx.spinner(color="#2563eb"),
                                 rx.text("Thinking...", color="#64748b", font_size="14px", font_weight="500"),
                                 padding="16px",
                                 background="white",
-                                border_radius="16px 16px 16px 0",
+                                border_radius="16px",
                                 box_shadow="0 4px 15px rgba(0,0,0,0.05)",
                                 align="center",
                                 spacing="3",
@@ -86,24 +87,16 @@ def chat() -> rx.Component:
                                 name="chat_input",
                                 placeholder="Ask anything about your documents...",
                                 width="100%",
-                                size="3",
-                                radius="full",
                                 height="50px",
                                 border="1px solid #cbd5e1",
                                 background_color="#ffffff",
                                 color="#1e293b"
                             ),
                             rx.button(
-                                rx.icon(tag="send", size=18),
+                                rx.icon(tag="send"),
                                 type="submit",
-                                size="3",
-                                radius="full",
                                 background="#2563eb",
                                 color="white",
-                                padding="16px",
-                                box_shadow="0 4px 14px rgba(37,99,235,0.3)",
-                                _hover={"background": "#1d4ed8", "transform": "scale(1.05)"},
-                                transition="all 0.2s"
                             ),
                             width="100%",
                             spacing="3",
@@ -140,13 +133,17 @@ def message_pair(item):
         # User Message
         rx.hstack(
             rx.spacer(),
-            rx.box(
-                rx.text(item.question, color="white", font_size="15px"),
-                background="#2563eb",
-                padding="14px 20px",
-                border_radius="20px 20px 0px 20px",
-                box_shadow="0 4px 15px rgba(37,99,235,0.2)",
-                max_width="75%"
+            rx.vstack(
+                rx.box(
+                    rx.text(item.question, color="white", font_size="15px"),
+                    background="#2563eb",
+                    padding="14px 20px",
+                    border_radius="20px",
+                    box_shadow="0 4px 15px rgba(37,99,235,0.2)",
+                ),
+                rx.text(item.question_language, font_size="10px", color="#94a3b8", text_align="right", width="100%"),
+                max_width="75%",
+                align_items="flex-end"
             ),
             width="100%"
         ),
@@ -154,7 +151,7 @@ def message_pair(item):
         # AI Message
         rx.hstack(
             rx.box(
-                rx.icon(tag="bot", size=24, color="#10b981"),
+                rx.icon(tag="bot", color="#10b981"),
                 padding="10px",
                 background="#ecfdf5",
                 border_radius="full",
@@ -165,20 +162,34 @@ def message_pair(item):
                     rx.text(item.answer, white_space="pre-wrap", color="#334155", font_size="15px", line_height="1.6"),
                     background="white",
                     padding="16px 20px",
-                    border_radius="0px 20px 20px 20px",
+                    border_radius="20px",
                     box_shadow="0 4px 15px rgba(0,0,0,0.05)",
                     border="1px solid #f1f5f9"
                 ),
-                rx.cond(
-                    item.sources != "",
-                    rx.hstack(
-                        rx.icon(tag="info", size=12, color="#94a3b8"),
-                        rx.text(f"Source: {item.sources}", font_size="12px", color="#94a3b8"),
-                        align="center",
-                        spacing="1",
-                        margin_top="4px",
-                        padding_left="10px"
-                    )
+                rx.hstack(
+                    rx.badge(item.response_language, color_scheme="blue"),
+                    rx.cond(
+                        item.sources != "",
+                        rx.hstack(
+                            rx.icon(tag="info", color="#94a3b8"),
+                            rx.text(f"Source: {item.sources}", font_size="12px", color="#94a3b8"),
+                            align="center",
+                            spacing="1",
+                        )
+                    ),
+                    rx.cond(
+                        item.sources == "System Intelligence",
+                        rx.button(
+                            "View Insights Dashboard",
+                            rx.icon(tag="layout_dashboard"),
+                            on_click=rx.redirect("/insights"),
+                            color_scheme="blue",
+                        )
+                    ),
+                    spacing="3",
+                    align="center",
+                    margin_top="4px",
+                    padding_left="10px"
                 ),
                 align="start",
                 max_width="85%"
