@@ -314,7 +314,10 @@ def insights():
                                 rx.text("Generate Intelligence Report"),
                                 on_click=InsightsState.handle_generate_insights,
                                 color_scheme="blue", width="100%", margin_top="20px",
-                                disabled=InsightsState.is_loading
+                                disabled=InsightsState.is_loading,
+                                _hover={"transform": "scale(1.02)", "box_shadow": "0 20px 25px -5px rgba(59, 130, 246, 0.2)"},
+                                transition="all 0.2s",
+                                cursor="pointer",
                             ),
                             width="100%"
                         ),
@@ -326,7 +329,7 @@ def insights():
 
                 rx.cond(
                     InsightsState.has_insights,
-                    rx.button(rx.icon(tag="trash"), "Clear History", on_click=InsightsState.clear_history, variant="soft", color_scheme="red", margin_top="20px")
+                    rx.button(rx.icon(tag="trash"), "Clear History", on_click=InsightsState.clear_history, variant="soft", color_scheme="red", margin_top="20px", cursor="pointer", _hover={"background": "#fee2e2"})
                 ),
 
                 rx.cond(InsightsState.error_message != "",

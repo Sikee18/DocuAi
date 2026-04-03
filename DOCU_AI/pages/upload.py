@@ -134,6 +134,9 @@ def upload():
                     on_click=UploadState.handle_upload(rx.upload_files("upload1")),
                     width="100%", color_scheme="blue", margin_top="24px",
                     disabled=rx.selected_files("upload1").length() == 0,
+                    _hover={"transform": "translateY(-2px)", "box_shadow": "0 10px 15px -3px rgba(37, 99, 235, 0.2)"},
+                    transition="all 0.2s",
+                    cursor="pointer",
                 ),
                 width="100%", max_width="600px", background="white", padding="40px", border_radius="24px",
                 box_shadow="0 10px 40px -10px rgba(0,0,0,0.08)", border="1px solid #e2e8f0"
@@ -145,6 +148,9 @@ def upload():
                     rx.button(
                         "Clear All", on_click=UploadState.clear_knowledge_base,
                         color_scheme="red", disabled=UploadState.files.length() == 0,
+                        variant="soft",
+                        _hover={"background": "#fee2e2"},
+                        cursor="pointer",
                     ),
                     width="100%", margin_bottom="20px", align="center",
                 ),

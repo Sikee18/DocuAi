@@ -387,18 +387,31 @@ def extract_insights(target_files: list[str] = None):
     
     try:
         import json
+        import re
         response = gemini_model.generate_content(prompt)
         raw_text = response.text.strip()
-        if "```json" in raw_text:
-            raw_text = raw_text.split("```json")[1].split("```")[0].strip()
-        elif "```" in raw_text:
-             raw_text = raw_text.split("```")[1].split("```")[0].strip()
+        
+        # Robust JSON extraction: Look for anything between { and }
+        json_match = re.search(r'(\{.*\})', raw_text, re.DOTALL)
+        if json_match:
+            clean_json = json_match.group(1)
+            # Handle potential markdown artifacts within the match
+            if "```json" in clean_json:
+                clean_json = clean_json.split("```json")[1].split("```")[0].strip()
+            elif "```" in clean_json:
+                clean_json = clean_json.split("```")[1].split("```")[0].strip()
             
-        insight_data = json.loads(raw_text)
-        return insight_data, []
+            insight_data = json.loads(clean_json)
+            return insight_data, []
+        else:
+            # Fallback if no JSON-like structure is found
+            print(f"No JSON found in response: {raw_text[:200]}...")
+            raise ValueError("Invalid JSON format from AI")
+            
     except Exception as e:
         print(f"Extraction Failed: {e}")
-        return {"error": "Context analysis failed. The documents may be too dense or unformatted."}, []
+        # Final emergency fallback: if it's a JSON parse error but we have raw text, try to just return a generic success if it looks like a summary
+        return {"error": "Context analysis failed. The documents may be too dense or unformatted. Please try again with a cleaner text sample."}, []
 
 
 # -------------------------------

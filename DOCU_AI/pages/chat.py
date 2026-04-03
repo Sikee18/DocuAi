@@ -29,6 +29,9 @@ def chat() -> rx.Component:
                         "New Chat",
                         on_click=ChatState.clear_history,
                         color_scheme="blue",
+                        _hover={"transform": "translateY(-1px)", "box_shadow": "0 4px 10px rgba(37, 99, 235, 0.2)"},
+                        transition="all 0.2s",
+                        cursor="pointer",
                     ),
                     align="center",
                     padding_y="20px",
@@ -90,13 +93,17 @@ def chat() -> rx.Component:
                                 height="50px",
                                 border="1px solid #cbd5e1",
                                 background_color="#ffffff",
-                                color="#1e293b"
+                                color="#1e293b",
+                                _focus={"border": "2px solid #2563eb", "box_shadow": "none"}
                             ),
                             rx.button(
                                 rx.icon(tag="send"),
                                 type="submit",
                                 background="#2563eb",
                                 color="white",
+                                _hover={"background": "#1d4ed8", "transform": "scale(1.05)"},
+                                transition="all 0.15s",
+                                cursor="pointer",
                             ),
                             width="100%",
                             spacing="3",

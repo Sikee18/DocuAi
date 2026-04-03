@@ -27,6 +27,9 @@ def hero():
                         background="#2563eb",
                         color="white",
                         size="3",
+                        _hover={"transform": "scale(1.05)", "box_shadow": "0 10px 15px -3px rgba(0, 0, 0, 0.1)"},
+                        transition="all 0.2s",
+                        cursor="pointer",
                     ),
                     rx.button(
                         "View History",
@@ -34,6 +37,9 @@ def hero():
                         variant="outline",
                         size="3",
                         color_scheme="gray",
+                        _hover={"background": "#f1f5f9", "transform": "translateY(-1px)"},
+                        transition="all 0.1s",
+                        cursor="pointer",
                     ),
                     spacing="5",
                     justify="center"
