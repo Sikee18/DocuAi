@@ -22,16 +22,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Initialize Reflex and Export the Frontend
-# We provide a dummy key during build to prevent GroqError.
-# Render Build: Pass the production URL via REFLEX_API_URL
 ARG REFLEX_API_URL
 ENV REFLEX_API_URL=$REFLEX_API_URL
+ENV TELEMETRY_ENABLED=false
+ENV NODE_OPTIONS=--max-old-space-size=4096
 
-RUN GROQ_API_KEY=gsk_build_check_dummy reflex init && \
-    GROQ_API_KEY=gsk_build_check_dummy reflex export --frontend-only && \
-    mkdir -p /app/static && \
+RUN GROQ_API_KEY=gsk_build_check_dummy reflex init
+RUN GROQ_API_KEY=gsk_build_check_dummy reflex export --frontend-only
+RUN mkdir -p /app/static && \
     unzip frontend.zip -d /app/static && \
     rm frontend.zip
+
 
 
 # -------------------------------
