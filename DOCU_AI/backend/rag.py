@@ -21,6 +21,9 @@ try:
 except:
     vision_model = None
 
+# Build-safe initialization: Use dummy key if actual key is missing during Docker build phase.
+groq_key = os.getenv("GROQ_API_KEY") or "gsk_build_time_placeholder"
+
 # Normal chat model (8b)
 llm = ChatGroq(
     model='llama-3.1-8b-instant',
