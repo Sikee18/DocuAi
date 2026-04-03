@@ -14,17 +14,15 @@ else:
 
 models_to_try = [
     "gemini-1.5-flash",
-    "gemini-1.5-flash-latest",
-    "gemini-1.5-flash-001",
-    "gemini-pro",
-    "gemini-pro-vision"
+    "gemini-1.5-pro",
+    "gemini-pro"
 ]
 
 for m_name in models_to_try:
     print(f"\n--- Testing {m_name} ---")
     try:
         model = genai.GenerativeModel(m_name)
-        response = model.generate_content("Say hi.")
-        print(f"✅ {m_name} worked!")
+        response = model.generate_content("Say hello in one word.")
+        print(f"✅ {m_name} worked: {response.text.strip()}")
     except Exception as e:
         print(f"❌ {m_name} failed: {e}")

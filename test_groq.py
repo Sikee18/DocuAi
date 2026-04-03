@@ -1,23 +1,55 @@
 import os
-import sys
+from langchain_groq import ChatGroq
 from dotenv import load_dotenv
-import requests
+import json
+import re
 
-load_dotenv("c:/Users/rathu/Downloads/RAG-APPLICATION-main/RAG-APPLICATION-main/.env")
-api_key = os.getenv("GROQ_API_KEY")
+load_dotenv()
 
-if not api_key:
-    print("No API Key")
-    sys.exit(1)
+# Setup Groq
+groq_key = os.getenv("GROQ_API_KEY")
+if groq_key:
+    llm = ChatGroq(
+        model='llama-3.3-70b-versatile',
+        temperature=0.1,
+        api_key=groq_key
+    )
+else:
+    print("❌ No Groq API key found")
+    exit()
 
-url = "https://api.groq.com/openai/v1/models"
-headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-try:
-    response = requests.get(url, headers=headers)
-    models = response.json().get('data', [])
-    for m in models:
-        m_id = m.get('id', '')
-        if 'vision' in m_id.lower() or 'llama' in m_id.lower():
-            print(f"Model ID: {m_id}")
-except Exception as e:
-    print(f"Error: {e}")
+def test_groq_insights():
+    prompt = """
+    You are an Expert Strategic Analyst.
+    Return ONLY a JSON object exactly like this:
+    {
+        "chart_type": "bar",
+        "title": "Groq Intelligence Test",
+        "labels": ["Efficiency", "Accuracy", "Speed"],
+        "values": [95, 98, 99],
+        "explanation": "Groq is extremely stable.",
+        "executive_summary": "System confirms Groq bridge is operational.",
+        "key_takeaways": ["Fast", "Reliable"],
+        "key_concepts": ["LLM"],
+        "comparison_analysis": "Groq outperforms legacy Gemini connectivity in this environment."
+    }
+    """
+    
+    print("🤖 Calling Groq...")
+    try:
+        response = llm.invoke(prompt)
+        raw_text = response.content.strip()
+        print("✅ Received Response")
+        
+        json_match = re.search(r'(\{.*\})', raw_text, re.DOTALL)
+        if json_match:
+            data = json.loads(json_match.group(1))
+            print("✅ JSON Parsed Successfully")
+            print(json.dumps(data, indent=2))
+        else:
+            print("❌ No JSON Found")
+    except Exception as e:
+        print(f"❌ Groq Failed: {e}")
+
+if __name__ == "__main__":
+    test_groq_insights()

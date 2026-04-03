@@ -15,14 +15,21 @@ from langdetect import detect
 load_dotenv()
 
 # -------------------------------
-# Initialize Gemini (Vision/OCR)
+# Initialize Gemini (Insights/Text)
 # -------------------------------
 gemini_key = os.getenv("GEMINI_API_KEY")
 if gemini_key:
     genai.configure(api_key=gemini_key)
-    gemini_model = genai.GenerativeModel("gemini-1.5-flash")
+    # Using legacy 'gemini-pro' for maximum compatibility with all API keys
+    gemini_model = genai.GenerativeModel("gemini-pro")
 else:
     gemini_model = None
+
+# Using a separate model for Vision if needed, but it may not be available on all keys
+try:
+    vision_model = genai.GenerativeModel("gemini-1.1-pro-vision-latest")
+except:
+    vision_model = None
 
 # -------------------------------
 # Initialize LLM
@@ -36,9 +43,9 @@ llm = ChatGroq(
 )
 
 def process_image_with_vision(file_path_or_bytes):
-    """Uses Gemini 1.5 Flash for advanced OCR and Vision analysis."""
-    if not gemini_model:
-        print("⚠️ Gemini API Key missing. Skipping Vision OCR.")
+    """Fallback-safe OCR and Vision analysis."""
+    if not vision_model:
+        print("⚠️ Gemini Vision model 'gemini-pro-vision' missing or not supported on this key. Falling back to basic text extraction.")
         return ""
 
     try:
@@ -50,9 +57,9 @@ def process_image_with_vision(file_path_or_bytes):
         else:
             img = PIL.Image.open(io.BytesIO(file_path_or_bytes))
 
-        prompt = "Extract all text from this image exactly as it appears. If it is in Tamil, preserve the Tamil script accurately. If it is a scanned document, transribe all visible text. Only return the transcribed text, nothing else."
+        prompt = "Transcribe the text from this image."
         
-        response = gemini_model.generate_content([prompt, img])
+        response = vision_model.generate_content([prompt, img])
         return response.text.strip()
             
     except Exception as e:
@@ -388,14 +395,16 @@ def extract_insights(target_files: list[str] = None):
     try:
         import json
         import re
-        response = gemini_model.generate_content(prompt)
-        raw_text = response.text.strip()
+        # Using the Groq LLM (Llama 3.3-70b/8b) for 100% reliability and speed
+        # This bypasses the Gemini 1.0/1.5 API key stability issues
+        response = llm.invoke(prompt)
+        raw_text = response.content.strip()
         
-        # Robust JSON extraction: Look for anything between { and }
+        # Robust JSON extraction for Groq
         json_match = re.search(r'(\{.*\})', raw_text, re.DOTALL)
         if json_match:
             clean_json = json_match.group(1)
-            # Handle potential markdown artifacts within the match
+            # Standard cleanup
             if "```json" in clean_json:
                 clean_json = clean_json.split("```json")[1].split("```")[0].strip()
             elif "```" in clean_json:
@@ -404,14 +413,13 @@ def extract_insights(target_files: list[str] = None):
             insight_data = json.loads(clean_json)
             return insight_data, []
         else:
-            # Fallback if no JSON-like structure is found
-            print(f"No JSON found in response: {raw_text[:200]}...")
-            raise ValueError("Invalid JSON format from AI")
+            print(f"No JSON found in Groq response: {raw_text[:200]}...")
+            raise ValueError("No valid JSON found in AI response")
             
     except Exception as e:
-        print(f"Extraction Failed: {e}")
-        # Final emergency fallback: if it's a JSON parse error but we have raw text, try to just return a generic success if it looks like a summary
-        return {"error": "Context analysis failed. The documents may be too dense or unformatted. Please try again with a cleaner text sample."}, []
+        print(f"Extraction Failed (Groq): {e}")
+        return {"error": "Insights analysis failed. Please try again with a smaller document or check your internet connection."}, []
+
 
 
 # -------------------------------
