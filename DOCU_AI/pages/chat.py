@@ -7,7 +7,7 @@ def chat() -> rx.Component:
     return rx.vstack(
         navbar(),
 
-        rx.box(
+        rx.center(
             rx.vstack(
                 # Header
                 rx.hstack(
@@ -112,8 +112,7 @@ def chat() -> rx.Component:
                 ),
 
                 width="100%",
-                max_width="900px",
-                margin="0 auto",
+                max_width="1000px",
                 background="white",
                 border_radius="24px",
                 box_shadow="0 20px 40px -15px rgba(0,0,0,0.1)",
@@ -123,9 +122,11 @@ def chat() -> rx.Component:
             ),
             width="100%",
             background="#f1f5f9",
-            padding="40px 20px",
-            min_height="100vh"
-        )
+            padding_y="40px",
+            min_height="95vh",
+        ),
+        spacing="0",
+        width="100%",
     )
 
 def message_pair(item):

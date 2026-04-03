@@ -280,45 +280,48 @@ def insights():
                     align_items="center", padding_y="60px", spacing="4", width="100%"
                 ),
                 
-                # SELECTION PANEL
-                rx.box(
-                    rx.vstack(
-                        rx.hstack(
-                            rx.icon(tag="settings_2", color="#6366f1"),
-                            rx.heading("Analysis Parameters", color="#1e293b"),
-                            spacing="2", align="center", margin_bottom="10px"
-                        ),
-                        # RESET to stable SELECT for mode choice
-                        rx.select(
-                            ["All Documents", "Single PDF"],
-                            value=InsightsState.mode,
-                            on_change=InsightsState.set_mode,
+                # SELECTION PANEL - Centered explicitly
+                rx.center(
+                    rx.box(
+                        rx.vstack(
+                            rx.hstack(
+                                rx.icon(tag="settings_2", color="#6366f1"),
+                                rx.heading("Analysis Parameters", color="#1e293b"),
+                                spacing="2", align="center", margin_bottom="10px"
+                            ),
+                            # RESET to stable SELECT for mode choice
+                            rx.select(
+                                ["All Documents", "Single PDF"],
+                                value=InsightsState.mode,
+                                on_change=InsightsState.set_mode,
+                                width="100%"
+                            ),
+                            rx.cond(
+                                InsightsState.is_single_mode,
+                                rx.vstack(
+                                    rx.text("Select Target Document:", font_size="13px", font_weight="600", color="#64748b", margin_top="15px"),
+                                    rx.select(
+                                        InsightsState.available_files,
+                                        value=InsightsState.selected_file,
+                                        on_change=InsightsState.set_selected_file,
+                                        width="100%"
+                                    ),
+                                    width="100%", align="start"
+                                )
+                            ),
+                            rx.button(
+                                rx.cond(InsightsState.is_loading, rx.spinner(), rx.icon(tag="bolt")),
+                                rx.text("Generate Intelligence Report"),
+                                on_click=InsightsState.handle_generate_insights,
+                                color_scheme="blue", width="100%", margin_top="20px",
+                                disabled=InsightsState.is_loading
+                            ),
                             width="100%"
                         ),
-                        rx.cond(
-                            InsightsState.is_single_mode,
-                            rx.vstack(
-                                rx.text("Select Target Document:", font_size="13px", font_weight="600", color="#64748b", margin_top="15px"),
-                                rx.select(
-                                    InsightsState.available_files,
-                                    value=InsightsState.selected_file,
-                                    on_change=InsightsState.set_selected_file,
-                                    width="100%"
-                                ),
-                                width="100%", align="start"
-                            )
-                        ),
-                        rx.button(
-                            rx.cond(InsightsState.is_loading, rx.spinner(), rx.icon(tag="bolt")),
-                            rx.text("Generate Intelligence Report"),
-                            on_click=InsightsState.handle_generate_insights,
-                            color_scheme="blue", width="100%", margin_top="20px",
-                            disabled=InsightsState.is_loading
-                        ),
-                        width="100%"
+                        padding="30px", background="white", border="1px solid #e2e8f0", border_radius="24px",
+                        box_shadow="0 10px 40px -10px rgba(0,0,0,0.08)", width="100%", max_width="500px"
                     ),
-                    padding="30px", background="white", border="1px solid #e2e8f0", border_radius="24px",
-                    box_shadow="0 10px 40px -10px rgba(0,0,0,0.08)", width="100%", max_width="500px"
+                    width="100%",
                 ),
 
                 rx.cond(
@@ -337,7 +340,7 @@ def insights():
 
                 rx.vstack(rx.foreach(InsightsState.insights, insight_session), width="100%", margin_top="20px", margin_bottom="100px"),
                 
-                width="100%", max_width="1200px"
+                width="100%", max_width="1200px", align_items="center",
             )
         ),
         footer(), background="#f8fafc", min_height="100vh",

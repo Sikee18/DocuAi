@@ -96,8 +96,13 @@ def upload():
     return rx.vstack(
         navbar(),
         rx.vstack(
-            rx.heading("Data Knowledge Base", size="7", color="#0f172a"),
-            rx.text("Upload PDF or text files to train your local AI.", color="#64748b"),
+            rx.vstack(
+                rx.heading("Data Knowledge Base", size="7", color="#0f172a"),
+                rx.text("Upload PDF or text files to train your local AI.", color="#64748b"),
+                align_items="center",
+                padding_y="40px",
+                width="100%",
+            ),
             rx.box(
                 rx.upload(
                     rx.vstack(
@@ -120,7 +125,8 @@ def upload():
                                 background="#f1f5f9", padding="8px 16px", border_radius="8px", width="100%"
                             )
                         ),
-                        width="100%"
+                        width="100%",
+                        margin_top="10px",
                     )
                 ),
                 rx.button(
@@ -189,7 +195,12 @@ def upload():
                     position="fixed", top="0", left="0", width="100vw", height="100vh", background="rgba(15, 23, 42, 0.4)",
                     backdrop_filter="blur(4px)", z_index="100", display="flex", align_items="center", justify_content="center"
                 )
-            )
+            ),
+            align_items="center",
+            width="100%",
+            background="#f8fafc",
+            min_height="90vh",
+            padding_bottom="60px",
         ),
         spacing="0", on_mount=UploadState.load_files, width="100%"
     )

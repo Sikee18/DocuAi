@@ -2,44 +2,47 @@ import reflex as rx
 
 def hero():
     return rx.vstack(
-        rx.box(
-            rx.text("Enterprise Ready", font_size="14px", font_weight="700", color="#2563eb", text_transform="uppercase", margin_bottom="4px", text_align="center"),
-            rx.heading(
-                "AI Document Intelligence Search & Retrieval",
-                size="9",
-                weight="bold",
-                text_align="center",
-            ),
-            rx.text(
-                "Instantly chat with your internal documents using advanced open-source RAG models. Secure, private, and incredibly fast.",
-                color="#64748b",
-                font_size="20px",
-                text_align="center",
-                max_width="600px",
-                margin_y="24px",
-                margin_x="auto"
-            ),
-            rx.hstack(
-                rx.button(
-                    "Get Started Now",
-                    rx.icon(tag="arrow-right"),
-                    on_click=rx.redirect("/upload"),
-                    background="#2563eb",
-                    color="white",
-                    size="3",
+        rx.center(
+            rx.vstack(
+                rx.text("Enterprise Ready", font_size="14px", font_weight="700", color="#2563eb", text_transform="uppercase", margin_bottom="4px"),
+                rx.heading(
+                    "AI Document Intelligence Search & Retrieval",
+                    size="9",
+                    weight="bold",
+                    text_align="center",
                 ),
-                rx.button(
-                    "View History",
-                    on_click=rx.redirect("/history"),
-                    variant="outline",
-                    size="3",
-                    color_scheme="gray",
+                rx.text(
+                    "Instantly chat with your internal documents using advanced open-source RAG models. Secure, private, and incredibly fast.",
+                    color="#64748b",
+                    font_size="20px",
+                    text_align="center",
+                    max_width="600px",
+                    margin_y="24px",
                 ),
-                spacing="5",
-                justify="center"
+                rx.hstack(
+                    rx.button(
+                        "Get Started Now",
+                        rx.icon(tag="arrow-right"),
+                        on_click=rx.redirect("/upload"),
+                        background="#2563eb",
+                        color="white",
+                        size="3",
+                    ),
+                    rx.button(
+                        "View History",
+                        on_click=rx.redirect("/history"),
+                        variant="outline",
+                        size="3",
+                        color_scheme="gray",
+                    ),
+                    spacing="5",
+                    justify="center"
+                ),
+                align_items="center",
+                width="100%",
+                padding_y="100px",
             ),
             width="100%",
-            margin_top="10%"
         ),
         # Statistics/Feature Cards Row
         rx.hstack(
@@ -56,7 +59,8 @@ def hero():
         padding="20px",
         min_height="80vh",
         background="radial-gradient(circle at top, #f8fafc 0%, #ffffff 100%)",
-        align="center"
+        align_items="center",
+        justify_content="center"
     )
 
 def feature_card(title: str, description: str, icon_tag: str):
