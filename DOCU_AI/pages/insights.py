@@ -40,8 +40,9 @@ class InsightsState(rx.State):
     selected_file: str = ""
     available_files: list[str] = []
     
-    # Historical tracking - Persistent via LocalStorage
-    insights: list[InsightRecord] = rx.LocalStorage([], name="docuai_insights_history")
+    # Historical tracking
+    insights: list[InsightRecord] = []
+
 
 
     @rx.var

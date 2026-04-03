@@ -21,12 +21,20 @@ try:
 except:
     vision_model = None
 
-groq_key = os.getenv("GROQ_API_KEY") or "gsk_build_time_placeholder"
+# Normal chat model (8b)
 llm = ChatGroq(
     model='llama-3.1-8b-instant',
     temperature=0.7,
     api_key=groq_key
 )
+
+# Heavy-duty intelligence model (70b) specifically for insights
+llm_insights = ChatGroq(
+    model='llama-3.3-70b-versatile',
+    temperature=0.1, # Keep it strictly logical for JSON
+    api_key=groq_key
+)
+
 
 # -------------------------------
 # Global Configuration
@@ -155,48 +163,49 @@ def extract_insights(target_files: list[str] = None):
     combined_context = "\n".join(doc_summaries)
     prompt = f"""
     Expert Strategic Analyst: Analyze documents and return JSON. 
-    IMPORTANT: If the document contains NO numerical statistics, you MUST generate "Mention Frequency" or "Impact Score" for the top 5 key themes/concepts to use as numerical values. This ensures the chart is NEVER empty.
+    IMPORTANT: If the document contains NO numerical statistics, you MUST generate "Mention Frequency" or "Impact Score" for the top 5 key themes/concepts to use as numerical values.
     
     SCHEMA: {{
         "chart_type": "pie" | "bar",
         "title": "Strategic Report",
         "labels": ["Concept A", "Concept B", "Concept C", "Concept D", "Concept E"],
         "values": [45, 30, 15, 5, 5],
-        "explanation": "Brief context about these themes...",
+        "explanation": "Brief context...",
         "executive_summary": "Detailed summary...",
         "key_takeaways": ["Point 1", "Point 2", "Point 3"],
-        "key_concepts": ["Concept1", "Concept2"],
+        "key_concepts": ["Concept 1", "Concept 2"],
         "comparison_analysis": ""
     }}
-    Rules: Strictly JSON only. No trailing commas. No markdown formatting.
-    DATA: {combined_context[:20000]}
+    Rules: Strictly JSON only. No trailing commas.
+    DATA: {combined_context[:15000]}
     """
 
     try:
         import json
-        response = llm.invoke(prompt)
+        # Using the 70B model for 100% reliable JSON
+        response = llm_insights.invoke(prompt)
         raw_text = response.content.strip()
         
-        # Enhanced Cleaning Sequence
         clean_json = clean_json_text(raw_text)
         
         try:
             data = json.loads(clean_json)
-            # Guarantee minimal fields
-            if not data.get("labels"): data["labels"] = ["Topic A", "Topic B"]
-            if not data.get("values"): data["values"] = [50, 50]
+            # Ensure fields exist
+            if not data.get("labels"): data["labels"] = ["Theme A", "Theme B", "Theme C"]
+            if not data.get("values"): data["values"] = [40, 40, 20]
             return data, []
         except:
             import re
             match = re.search(r"(\{.*\})", raw_text, re.DOTALL)
             if match:
                 data = json.loads(match.group(1))
-                if not data.get("labels"): data["labels"] = ["Topic A", "Topic B"]
-                if not data.get("values"): data["values"] = [50, 50]
+                if not data.get("labels"): data["labels"] = ["Theme A", "Theme B", "Theme C"]
+                if not data.get("values"): data["values"] = [40, 40, 20]
                 return data, []
-            raise ValueError("Invalid JSON format")
+            raise ValueError("No valid JSON found")
             
     except Exception as e:
-        print(f"🚨 Insights Error: {e}")
-        return {"error": "Insights analysis failed for this document. It may be too dense or unformatted. Please try a cleaner sample."}, []
+        print(f"🚨 Insights Error (70B): {e}")
+        return {"error": f"Insights analysis failed. Please try a cleaner sample."}, []
+
 
