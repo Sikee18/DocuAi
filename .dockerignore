@@ -1,0 +1,17 @@
+.web/
+node_modules/
+venv/
+.env
+.next/
+__pycache__/
+*.pyc
+.git/
+*.zip
+*.log
+docker-compose*
+.vscode/
+.idea/
+.pytest_cache/
+documents/
+uploaded_files/
+chroma_db/

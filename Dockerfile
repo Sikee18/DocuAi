@@ -3,14 +3,16 @@
 # -------------------------------
 FROM python:3.11-slim AS builder
 
-# Install Node.js, unzip, and other build tools
+# Install Node.js, unzip, git, and build-essential for library compilation
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     git \
+    build-essential \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /app
 
