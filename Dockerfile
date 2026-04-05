@@ -3,15 +3,21 @@
 # -------------------------------
 FROM python:3.11-slim AS builder
 
-# Install Node.js, unzip, git, and build-essential for library compilation
+# Install Node.js, unzip, git, build-essential, and graphics/PDF system libraries
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     git \
     build-essential \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
+
 
 
 WORKDIR /app
@@ -30,7 +36,7 @@ ENV TELEMETRY_ENABLED=false
 ENV NODE_OPTIONS=--max-old-space-size=4096
 
 RUN GROQ_API_KEY=gsk_build_check_dummy reflex init
-RUN GROQ_API_KEY=gsk_build_check_dummy reflex export --frontend-only
+RUN GROQ_API_KEY=gsk_build_check_dummy reflex export --frontend-only --loglevel debug || (echo "🚨 BUILD ERROR TRACE: Export failed" && exit 1)
 RUN mkdir -p /app/static && \
     unzip frontend.zip -d /app/static && \
     rm frontend.zip
