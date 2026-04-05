@@ -20,7 +20,8 @@ rapidocr-onnxruntime
 requests
 
 # Frontend
-reflex==0.8.27
+reflex==0.8.28.post1
+matplotlib
 gunicorn
 reportlab
 chromadb
