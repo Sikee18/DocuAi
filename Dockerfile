@@ -82,9 +82,12 @@ COPY app.py rxconfig.py requirements.txt ./
 # 4. Create documents directory for RAG
 RUN mkdir -p /app/DOCU_AI/documents
 
+# 5. Boot Injection Script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 # Railway dynamically assigns $PORT; our app.py listens to it.
 EXPOSE 7860
 
-# Launch the unified FastAPI app
-# Python 3.11-slim + pruned packages should keep us near 2.5GB.
-CMD ["python3", "-m", "uvicorn", "app:api", "--host", "0.0.0.0", "--port", "7860"]
+# Launch through the dynamic environment patch script
+CMD ["/app/entrypoint.sh"]
