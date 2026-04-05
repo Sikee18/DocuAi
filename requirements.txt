@@ -25,3 +25,5 @@ matplotlib
 gunicorn
 reportlab
 chromadb
+fastapi
+uvicorn
