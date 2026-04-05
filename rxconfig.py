@@ -2,8 +2,9 @@ import reflex as rx
 import os
 
 # Dynamic API URL for Render deployment
-# During 'reflex export', we pass the production URL via REFLEX_API_URL
-api_url = os.getenv("REFLEX_API_URL", "http://localhost:8000")
+api_url = os.getenv("REFLEX_API_URL", "")
+if not api_url:
+    api_url = "http://localhost:8000"
 
 config = rx.Config(
     app_name="DOCU_AI",
