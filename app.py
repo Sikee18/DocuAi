@@ -6,8 +6,8 @@ import reflex as rx
 # Import the main Reflex app object
 from DOCU_AI.DOCU_AI import app
 
-# 1. Extract the internal FastAPI instance
-api = app.api
+# 1. Extract the internal FastAPI instance (Reflex 0.8+ uses _api)
+api = getattr(app, "api", getattr(app, "_api", None))
 
 # 2. Dynamic Port Handling (Cloud Agnostic)
 # Railway/Render provide the PORT variable dynamically
