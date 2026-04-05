@@ -6,8 +6,14 @@ export PORT="${PORT:-7860}"
 # If REFLEX_API_URL is provided by Render, dynamically patch the static JS bundle
 if [ -n "$REFLEX_API_URL" ]; then
     echo "Dynamic Patch: Injecting $REFLEX_API_URL into compiled frontend Javascript..."
-    # Replace default hardcoded localhost URL deeply within the bundled Javascript
-    find ./static -type f -name "*.js" -exec sed -i "s|http://localhost:8000|$REFLEX_API_URL|g" {} +
+    
+    # Calculate WebSocket URL (replace http/https with ws/wss)
+    WSS_URL="${REFLEX_API_URL/https:\/\//wss:\/\/}"
+    WSS_URL="${WSS_URL/http:\/\//ws:\/\/}"
+
+    # Replace BOTH API and WebSocket endpoints in the compiled bundle
+    find /app/static -type f -name "*.js" -exec sed -i "s|http://localhost:8000|$REFLEX_API_URL|g" {} +
+    find /app/static -type f -name "*.js" -exec sed -i "s|ws://localhost:8000|$WSS_URL|g" {} +
 else
     echo "Warning: REFLEX_API_URL environment variable is missing. WebSockets may default to localhost."
 fi
