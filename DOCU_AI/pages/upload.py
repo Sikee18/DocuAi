@@ -130,10 +130,15 @@ def upload():
                     )
                 ),
                 rx.button(
-                    "Sync & Upload Knowledge Base",
+                    rx.cond(
+                        UploadState.is_uploading,
+                        UploadState.processing_step,
+                        "Sync & Upload Knowledge Base"
+                    ),
                     on_click=UploadState.handle_upload(rx.upload_files("upload1")),
                     width="100%", color_scheme="blue", margin_top="24px",
-                    disabled=rx.selected_files("upload1").length() == 0,
+                    disabled=(rx.selected_files("upload1").length() == 0) | UploadState.is_uploading,
+                    loading=UploadState.is_uploading,
                     _hover={"transform": "translateY(-2px)", "box_shadow": "0 10px 15px -3px rgba(37, 99, 235, 0.2)"},
                     transition="all 0.2s",
                     cursor="pointer",
