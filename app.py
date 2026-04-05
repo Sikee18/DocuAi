@@ -20,6 +20,11 @@ origins = [
     "*"  # Wildcard allows early Railway domains to connect without manual config
 ]
 
+# Add external URLs for exact host matching
+render_url = os.getenv("RENDER_EXTERNAL_URL", "")
+if render_url:
+    origins.append(render_url)
+
 api.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
