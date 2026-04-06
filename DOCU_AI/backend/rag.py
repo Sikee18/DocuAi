@@ -121,10 +121,10 @@ def build_vectorstore():
 
     class GeminiEmbeddings(Embeddings):
         def embed_documents(self, texts: list[str]) -> list[list[float]]:
-            res = genai.embed_content(model="models/embedding-001", content=texts)
+            res = genai.embed_content(model="models/text-embedding-004", content=texts)
             return res.get('embedding', []) if isinstance(res.get('embedding', []), list) else [res.get('embedding', [])]
         def embed_query(self, text: str) -> list[float]:
-            res = genai.embed_content(model="models/embedding-001", content=text)
+            res = genai.embed_content(model="models/text-embedding-004", content=text)
             return res.get('embedding', [])
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=30)
