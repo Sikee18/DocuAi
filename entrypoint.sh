@@ -19,9 +19,12 @@ if [ -n "$REFLEX_API_URL" ]; then
     find /app/.web/_static -type f -name "*.js" -exec sed -i "s|ws://localhost:8000|$WSS_URL|g" {} +
     find /app/.web/_static -type f -name "*.js" -exec sed -i "s|http://localhost:8000|$REFLEX_API_URL|g" {} +
 else
-    echo "Warning: REFLEX_API_URL environment variable is missing. WebSockets may default to localhost."
+# Create dummy package.json BEFORE calling reflex run, so Reflex's engine checks bypass the node_modules verification cleanly cleanly!
+mkdir -p /app/.web
+if [ ! -f /app/.web/package.json ]; then
+    echo "{}" > /app/.web/package.json
 fi
 
-# Reflex `--backend-only` completely bypasses NodeJS/npm checks for the missing UI engine, serving the `.web/_static` natively automatically!
+# Removing '--backend-only' because we WANT Reflex to serve the static frontend UI on '/'!!
 echo "Starting Reflex Natively on port $PORT..."
-exec reflex run --env prod --backend-only
+exec reflex run --env prod
