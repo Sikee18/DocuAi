@@ -6,6 +6,10 @@ import reflex as rx
 # Import the main Reflex app object
 from DOCU_AI.DOCU_AI import app
 
+# FORCE compilation of backend routes (/_event, /_upload, etc.) NOW.
+# This ensures Reflex API routes are given priority in FastAPI OVER the UI catch-all.
+app._compile()
+
 # 1. Extract the internal FastAPI instance (Reflex 0.8+ uses _api)
 api = getattr(app, "api", getattr(app, "_api", None))
 
