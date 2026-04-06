@@ -3,28 +3,30 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import reflex as rx
 
-# Import the main Reflex app object
 from DOCU_AI.DOCU_AI import app
 
-# FORCE compilation of backend routes (/_event, /_upload, etc.) NOW.
-# This ensures Reflex API routes are given priority in FastAPI OVER the UI catch-all.
+# 1. Force state compilation. This guarantees WebSockets and Upload logic are permanently instantiated.
 app._compile()
 
-# 1. Extract the internal FastAPI instance (Reflex 0.8+ uses _api)
+# 2. Extract inner FastAPI framework
 api = getattr(app, "api", getattr(app, "_api", None))
 
-# 2. Dynamic Port Handling (Cloud Agnostic)
-# Railway/Render provide the PORT variable dynamically
+# 3. Strip all Server-Side UI rendering routes! 
+# Since we explicitly exported a static frontend.zip, we do not want Reflex crashing Render by attempting to boot Node.js to SSR the UI upon page load.
+# We exclusively keep only the backend infrastructure paths (Sockets, Uploads, and Pings).
+api.router.routes = [
+    route for route in api.router.routes
+    if getattr(route, "path", "/").startswith("/_") or getattr(route, "path", "/") == "/ping"
+]
+
+# 4. Standard Configuration
 PORT = int(os.getenv("PORT", "7860"))
 
-# 3. Configure CORS with Wildcard for Migration Safety
 origins = [
     "https://localhost:8000",
     "http://localhost:3000",
-    "*"  # Wildcard allows early Railway domains to connect without manual config
+    "*"  
 ]
-
-# Add external URLs for exact host matching
 render_url = os.getenv("RENDER_EXTERNAL_URL", "")
 if render_url:
     origins.append(render_url)
@@ -37,16 +39,10 @@ api.add_middleware(
     allow_headers=["*"],
 )
 
-# 3. Serve Frontend Statics (Consolidating to Port 7860)
-# This requires 'reflex export --frontend-only' to have been run
-# into the 'static' directory during the Docker build.
+# 5. Serve Pre-Compiled UI as Catch-All
 static_dir = os.path.join(os.getcwd(), "static")
-
 if os.path.exists(static_dir):
     api.mount("/", StaticFiles(directory=static_dir, html=True), name="frontend")
-    print(f"Serving frontend from {static_dir}")
+    print(f"Serving precompiled frontend directly from {static_dir}")
 else:
     print(f"Warning: Static directory {static_dir} not found. Running API only.")
-
-# For local testing, we can run this file directly with uvicorn
-# Command: uvicorn app:app --host 0.0.0.0 --port 7860
