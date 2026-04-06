@@ -114,14 +114,23 @@ def build_vectorstore():
         retriever = None
         return
 
-    # Split & Embed
+    # Split & Embed (Switched to Gemini API explicitly to save 300MB+ RAM during Render's strict 512MB free tier Memory Caps!)
     from langchain_text_splitters import RecursiveCharacterTextSplitter
     from langchain_community.vectorstores import Chroma
-    from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
+    from langchain_core.embeddings import Embeddings
+
+    class GeminiEmbeddings(Embeddings):
+        def embed_documents(self, texts: list[str]) -> list[list[float]]:
+            res = genai.embed_content(model="models/embedding-001", content=texts)
+            return res.get('embedding', []) if isinstance(res.get('embedding', []), list) else [res.get('embedding', [])]
+        def embed_query(self, text: str) -> list[float]:
+            res = genai.embed_content(model="models/embedding-001", content=text)
+            return res.get('embedding', [])
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=30)
     splitted_docs = splitter.split_documents(docs)
-    embedding_model = FastEmbedEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    
+    embedding_model = GeminiEmbeddings()
     vectorstore = Chroma.from_documents(documents=splitted_docs, embedding=embedding_model)
     retriever = vectorstore.as_retriever(search_type="mmr", search_kwargs={"k": 3})
 
