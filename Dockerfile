@@ -59,10 +59,13 @@ RUN mkdir -p /app/static && \
 # -------------------------------
 FROM python:3.11-slim
 
-# Install minimal runtime dependencies
+# Install minimal runtime dependencies and Node.js for Reflex's internal boot checks
 RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
+    curl \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
