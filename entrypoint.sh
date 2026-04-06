@@ -19,7 +19,10 @@ if [ -n "$REFLEX_API_URL" ]; then
     find /app/.web/_static -type f -name "*.js" -exec sed -i "s|ws://localhost:8000|$WSS_URL|g" {} +
     find /app/.web/_static -type f -name "*.js" -exec sed -i "s|http://localhost:8000|$REFLEX_API_URL|g" {} +
 else
-# Create dummy package.json BEFORE calling reflex run, so Reflex's engine checks bypass the node_modules verification cleanly cleanly!
+    echo "Warning: REFLEX_API_URL environment variable is missing. WebSockets may default to localhost."
+fi
+
+# Create dummy package.json BEFORE calling reflex run, so Reflex's engine checks bypass the node_modules verification cleanly!
 mkdir -p /app/.web
 if [ ! -f /app/.web/package.json ]; then
     echo "{}" > /app/.web/package.json
