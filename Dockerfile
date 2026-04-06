@@ -47,8 +47,8 @@ ENV NODE_OPTIONS=--max-old-space-size=4096
 
 RUN GROQ_API_KEY=gsk_build_check_dummy reflex init
 RUN GROQ_API_KEY=gsk_build_check_dummy reflex export --frontend-only
-RUN mkdir -p /app/static && \
-    unzip frontend.zip -d /app/static && \
+RUN mkdir -p /app/.web/_static && \
+    unzip frontend.zip -d /app/.web/_static && \
     rm frontend.zip
 
 
@@ -74,13 +74,13 @@ WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
-# 2. Copy the pre-built static assets (Frontend) from the builder
-COPY --from=builder /app/static ./static
+# 2. Copy the pre-built static assets (Frontend) from the builder natively
+COPY --from=builder /app/.web/_static ./.web/_static
 
 # 3. SURGICAL COPY of the source code (Excludes heavy .web and node_modules)
 # This is critical to staying under the 4GB Railway limit.
 COPY DOCU_AI/ ./DOCU_AI/
-COPY app.py rxconfig.py requirements.txt ./
+COPY rxconfig.py requirements.txt ./
 
 # 4. Create documents directory for RAG
 RUN mkdir -p /app/DOCU_AI/documents

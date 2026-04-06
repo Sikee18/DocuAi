@@ -11,6 +11,7 @@ if not api_url:
 cors_origins = ["*"]
 
 config = rx.Config(
+    port=int(os.environ.get("PORT", "8000")),
     app_name="DOCU_AI",
     cors_allowed_origins=cors_origins,
     api_url=api_url,
