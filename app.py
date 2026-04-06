@@ -12,11 +12,11 @@ app._compile()
 api = getattr(app, "api", getattr(app, "_api", None))
 
 # 3. Strip all Server-Side UI rendering routes! 
-# Since we explicitly exported a static frontend.zip, we do not want Reflex crashing Render by attempting to boot Node.js to SSR the UI upon page load.
-# We exclusively keep only the backend infrastructure paths (Sockets, Uploads, and Pings).
 api.router.routes = [
     route for route in api.router.routes
-    if getattr(route, "path", "/").startswith("/_") or getattr(route, "path", "/") == "/ping"
+    if getattr(route, "path", "/").startswith("/_") 
+    or getattr(route, "path", "/") == "/ping"
+    or not hasattr(route, "path")
 ]
 
 # 4. Standard Configuration
