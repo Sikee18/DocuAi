@@ -81,7 +81,7 @@ COPY --from=builder /app/.web/_static ./.web/_static
 # 3. SURGICAL COPY of the source code (Excludes heavy .web and node_modules)
 # This is critical to staying under the 4GB Railway limit.
 COPY DOCU_AI/ ./DOCU_AI/
-COPY rxconfig.py requirements.txt ./
+COPY app.py rxconfig.py requirements.txt ./
 
 # 4. Create documents directory for RAG
 RUN mkdir -p /app/DOCU_AI/documents
