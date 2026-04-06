@@ -22,12 +22,7 @@ else
     echo "Warning: REFLEX_API_URL environment variable is missing. WebSockets may default to localhost."
 fi
 
-# Create dummy package.json BEFORE calling reflex run, so Reflex's engine checks bypass the node_modules verification cleanly!
-mkdir -p /app/.web
-if [ ! -f /app/.web/package.json ]; then
-    echo "{}" > /app/.web/package.json
-fi
-
-# Removing '--backend-only' because we WANT Reflex to serve the static frontend UI on '/'!!
-echo "Starting Reflex Natively on port $PORT..."
-exec reflex run --env prod
+# We use uvicorn to manually host the WebSocket ASGI component alongside our pre-exported static UI payload.
+# This prevents the buggy 'reflex run' command from attempting to compile React inside a low-resource Render instance for 15+ minutes!!
+echo "Starting Ultra-Lean Uvicorn Bridge Natively on port $PORT..."
+exec python3 -m uvicorn app:app_wrapper --host 0.0.0.0 --port "$PORT" --proxy-headers --forwarded-allow-ips "*"
