@@ -24,4 +24,4 @@ else
 fi
 
 echo "Starting Uvicorn Backend on port $PORT..."
-exec python3 -m uvicorn app:api --host 0.0.0.0 --port "$PORT"
+exec python3 -m uvicorn app:api --host 0.0.0.0 --port "$PORT" --proxy-headers --forwarded-allow-ips "*"
