@@ -23,5 +23,9 @@ else
     echo "Warning: REFLEX_API_URL environment variable is missing. WebSockets may default to localhost."
 fi
 
+# Reflex requires a package.json to be visually present during startup engine checks
+mkdir -p /app/.web
+echo "{}" > /app/.web/package.json
+
 echo "Starting Uvicorn Backend on port $PORT..."
 exec python3 -m uvicorn app:app --host 0.0.0.0 --port "$PORT" --proxy-headers --forwarded-allow-ips "*"
