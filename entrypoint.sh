@@ -22,6 +22,13 @@ else
     echo "Warning: REFLEX_API_URL environment variable is missing. WebSockets may default to localhost."
 fi
 
+# Reflex `_compile()` deeply mandates the physical existence of a package.json file before booting the Python state engine, even when hosting purely backend logic!
+# Injecting a dummy file satisfies the sanity checks without triggering a 15 minute React build!
+mkdir -p /app/.web
+if [ ! -f /app/.web/package.json ]; then
+    echo "{}" > /app/.web/package.json
+fi
+
 # We use uvicorn to manually host the WebSocket ASGI component alongside our pre-exported static UI payload.
 # This prevents the buggy 'reflex run' command from attempting to compile React inside a low-resource Render instance for 15+ minutes!!
 echo "Starting Ultra-Lean Uvicorn Bridge Natively on port $PORT..."
