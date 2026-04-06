@@ -45,4 +45,4 @@ else:
     print(f"Warning: Static directory {static_dir} not found. Running API only.")
 
 # For local testing, we can run this file directly with uvicorn
-# Command: uvicorn app:api --host 0.0.0.0 --port 7860
+# Command: uvicorn app:app --host 0.0.0.0 --port 7860
